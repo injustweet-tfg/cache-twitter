@@ -22,4 +22,38 @@ router.route("/").get(function (req, res) {
 });
 
 
+
+// This section will help you create a new record.
+router.route("/add").post(function (req, response) {
+    let db_connect = dbo.getDb("twitter");
+    db_connect.collection("tweets_v1").insertMany(req.body, function (err, res) {
+        if (err) throw err;
+    });
+});
+
+// This section will help you delete
+router.route("/delete").delete((req, response) => {
+    let db_connect = dbo.getDb("twitter");
+    db_connect.collection("tweets_v1").deleteMany({});
+});
+
+/*
+  await fetch(`http://localhost:5000/update/${params.id}`, {
+     method: "POST",
+     body: JSON.stringify(editedPerson),
+     headers: {
+       'Content-Type': 'application/json'
+     },
+   });
+ 
+   navigate("/");
+ }
+
+ async function deleteRecord(id) {
+    await fetch(`http://localhost:5000/${id}`, {
+      method: "DELETE"
+    });
+
+*/
+
 module.exports = router;
