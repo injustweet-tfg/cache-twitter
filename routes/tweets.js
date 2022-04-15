@@ -12,7 +12,7 @@ router.route("/").get(function (req, res) {
     let date_start = parseInt(req.query.dateStart);
     let date_end = parseInt(req.query.dateEnd);
     db_connect
-        .collection("tweets_v1")
+        .collection("tweets_ipfs")
         // .find({ user: user_name })
         .find({ date: { $gt: date_start, $lt: date_end } })
         .toArray(function (err, result) {
@@ -26,7 +26,7 @@ router.route("/").get(function (req, res) {
 // This section will help you create a new record.
 router.route("/add").post(function (req, response) {
     let db_connect = dbo.getDb("twitter");
-    db_connect.collection("tweets_v1").insertMany(req.body, function (err, res) {
+    db_connect.collection("tweets_ipfs").insertMany(req.body, function (err, res) {
         if (err) throw err;
     });
 });
@@ -34,7 +34,7 @@ router.route("/add").post(function (req, response) {
 // This section will help you delete
 router.route("/delete").delete((req, response) => {
     let db_connect = dbo.getDb("twitter");
-    db_connect.collection("tweets_v1").deleteMany({});
+    db_connect.collection("tweets_ipfs").deleteMany({});
 });
 
 /*
