@@ -39,78 +39,34 @@ router.route("/delete").delete((req, response) => {
 
 router.route("/words").get(function (req, res) {
   let db_connect = dbo.getDb("twitter");
+
   let word = req.query.word;
   let date_start = parseInt(req.query.dateStart);
   let date_end = parseInt(req.query.dateEnd);
   let order = parseInt(req.query.order); //0 - date desc(-1), 1 - date asc(1), 2 - rt desc(-1), 3 - fav desc(-1)
-  let dateOrder = (order == 1) ? 1 : -1;
 
-  if (word.at(0) == "@") {
-    if (order == 0 || order == 1) {
-      db_connect
-        .collection("tweets_ipfs")
-        .find({ date: { $gt: date_start, $lt: date_end }, user: word.slice(1) })
-        .sort({ date: dateOrder })
-        .toArray(function (err, result) {
-          if (err) throw err;
-          res.json(result);
-        });
-    }
-    else if (order == 2) {
-      db_connect
-        .collection("tweets_ipfs")
-        .find({ date: { $gt: date_start, $lt: date_end }, user: word.slice(1) })
-        .sort({ retweets: -1 })
-        .toArray(function (err, result) {
-          if (err) throw err;
-          res.json(result);
-        });
-    }
-    else {
-      db_connect
-        .collection("tweets_ipfs")
-        .find({ date: { $gt: date_start, $lt: date_end }, user: word.slice(1) })
-        .sort({ likes: -1 })
-        .toArray(function (err, result) {
-          if (err) throw err;
-          res.json(result);
-        });
-    }
+  let textuser =  word[0] == "@" ? "user" : "text"
+  let nameVariable = (order == 0 || order == 1) ? "date" : ((order == 2) ? "retweets" : "likes");
+  let ascdesc = (order == 1) ? 1 : -1;
+  value = word[0] == "@" ? word.slice(1) : { $regex: word };
 
-  }
+  var query = {}
+  query['date']={ $gt: date_start, $lt: date_end } ;
+  query[textuser] = value;
 
-  else {
-    if (order == 0 || order == 1) {
-      db_connect
-        .collection("tweets_ipfs")
-        .find({ date: { $gt: date_start, $lt: date_end }, text: { $regex: word } })
-        .sort({ date: dateOrder })
-        .toArray(function (err, result) {
-          if (err) throw err;
-          res.json(result);
-        });
-    }
-    else if (order == 2) {
-      db_connect
-        .collection("tweets_ipfs")
-        .find({ date: { $gt: date_start, $lt: date_end }, text: { $regex: word } })
-        .sort({ retweets: -1 })
-        .toArray(function (err, result) {
-          if (err) throw err;
-          res.json(result);
-        });
-    }
-    else {
-      db_connect
-        .collection("tweets_ipfs")
-        .find({ date: { $gt: date_start, $lt: date_end }, text: { $regex: word } })
-        .sort({ likes: -1 })
-        .toArray(function (err, result) {
-          if (err) throw err;
-          res.json(result);
-        });
-    }
-  }
+  var query_sort = {};
+  query_sort[nameVariable] = ascdesc;
+
+  console.log(query)
+  console.log(query_sort)
+  db_connect
+    .collection("tweets_ipfs")
+    .find(query)
+    .sort(query_sort)
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
 });
 
 module.exports = router;
