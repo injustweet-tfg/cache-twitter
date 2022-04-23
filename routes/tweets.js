@@ -7,23 +7,17 @@ const router = express.Router();
 // List of tweets between two dates
 router.route("/").get(function (req, res) {
   let db_connect = dbo.getDb("twitter");
-  // console.log(db_connect);
-  // let user_name = req.query.user;
   let date_start = parseInt(req.query.dateStart);
   let date_end = parseInt(req.query.dateEnd);
   db_connect
     .collection("tweets_ipfs")
-    // .find({ user: user_name })
-    .find({ date: { $gt: date_start, $lt: date_end } })
+    .find({ date: { $gt: date_start, $lt: date_end } }) 
     .toArray(function (err, result) {
       if (err) throw err;
       res.json(result);
     });
 });
 
-
-
-// This section will help you create a new record.
 router.route("/add").post(function (req, response) {
   let db_connect = dbo.getDb("twitter");
   db_connect.collection("tweets_ipfs").insertMany(req.body, function (err, res) {
@@ -33,7 +27,6 @@ router.route("/add").post(function (req, response) {
   });
 });
 
-// This section will help you delete
 router.route("/delete").delete((req, response) => {
   let db_connect = dbo.getDb("twitter");
   db_connect.collection("tweets_ipfs").deleteMany({}, function (err, obj) {
@@ -44,23 +37,19 @@ router.route("/delete").delete((req, response) => {
 
 });
 
-/*
-  await fetch(`http://localhost:5000/update/${params.id}`, {
-     method: "POST",
-     body: JSON.stringify(editedPerson),
-     headers: {
-       'Content-Type': 'application/json'
-     },
-   });
- 
-   navigate("/");
- }
 
- async function deleteRecord(id) {
-    await fetch(`http://localhost:5000/${id}`, {
-      method: "DELETE"
+router.route("/search").post(function (req, response) {
+  let db_connect = dbo.getDb("twitter");
+  let user_name = req.query.user;
+  let date_start = parseInt(req.query.dateStart);
+  let date_end = parseInt(req.query.dateEnd);
+  db_connect
+    .collection("tweets_ipfs")
+    .find({ date: { $gt: date_start, $lt: date_end }, user: user_name }) 
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
     });
-
-*/
+});
 
 module.exports = router;
