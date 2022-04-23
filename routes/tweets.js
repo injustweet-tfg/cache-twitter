@@ -38,7 +38,7 @@ router.route("/delete").delete((req, response) => {
 });
 
 
-router.route("/search").get(function (req, response) {
+router.route("/search").get(function (req, res) {
   let db_connect = dbo.getDb("twitter");
   let user_name = req.query.user;
   let date_start = parseInt(req.query.dateStart);
