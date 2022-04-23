@@ -44,7 +44,7 @@ router.route("/words").get(function (req, res) {
   if (word.at(0) == "@") {
     db_connect
       .collection("tweets_ipfs")
-      .find({ date: { $gt: date_start, $lt: date_end }, user: word })
+      .find({ date: { $gt: date_start, $lt: date_end }, user: word.slice(1) })
       .toArray(function (err, result) {
         if (err) throw err;
         res.json(result);
