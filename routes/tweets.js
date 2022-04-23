@@ -56,13 +56,15 @@ router.route("/search").get(function (req, res) {
 router.route("/words").get(function (req, res) {
   let db_connect = dbo.getDb("twitter");
   let word = req.query.word;
+  let date_start = parseInt(req.query.dateStart);
+  let date_end = parseInt(req.query.dateEnd);
   let order = parseInt(req.query.order); //0 - date desc(-1), 1 - date asc(1), 2 - rt desc(-1), 3 - fav desc(-1)
   let dateOrder = (order == 1) ? 1 : -1;
   if (order == 0 || order == 1) {
     db_connect
       .collection("tweets_ipfs")
-      .find({ "text": { $regex: word } })
-      .sort({ "date": dateOrder })
+      .find({ date: { $gt: date_start, $lt: date_end }, text: { $regex: word }})
+      .sort({ date: dateOrder })
       .toArray(function (err, result) {
         if (err) throw err;
         res.json(result);
@@ -71,8 +73,8 @@ router.route("/words").get(function (req, res) {
   else if (order == 2){
     db_connect
       .collection("tweets_ipfs")
-      .find({ "text": { $regex: word } })
-      .sort({ "retweets": -1 })
+      .find({ date: { $gt: date_start, $lt: date_end }, text: { $regex: word }})
+      .sort({ retweets: -1 })
       .toArray(function (err, result) {
         if (err) throw err;
         res.json(result);
@@ -81,8 +83,8 @@ router.route("/words").get(function (req, res) {
   else {
     db_connect
     .collection("tweets_ipfs")
-    .find({ "text": { $regex: word } })
-    .sort({ "likes": -1 })
+    .find({ date: { $gt: date_start, $lt: date_end }, text: { $regex: word }})
+    .sort({ likes: -1 })
     .toArray(function (err, result) {
       if (err) throw err;
       res.json(result);
