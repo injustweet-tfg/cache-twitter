@@ -52,4 +52,17 @@ router.route("/search").get(function (req, res) {
     });
 });
 
+
+router.route("/words").get(function (req, res) {
+  let db_connect = dbo.getDb("twitter");
+  let word = req.query.word;
+  db_connect
+    .collection("tweets_ipfs")
+    .find({"text" : {$regex : word}})
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
 module.exports = router;
