@@ -1,5 +1,3 @@
-// Server
-
 const express = require('express');
 const app = express();
 
@@ -17,9 +15,12 @@ app.use(express.json());
 
 // Routes
 app.use(require('./routes/tweets'));
-const dbo = require("./db/conn"); // connect MongoDB
 
+// connect to MongoDB
+const dbo = require("./db/conn"); 
 
+// Server who listens to requests and uses a client of
+// MongoDB to fulfill them
 app.listen(port, () => {
     dbo.connectToServer(function (err) {
         if (err) console.error(err);
