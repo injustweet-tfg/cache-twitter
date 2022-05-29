@@ -1,4 +1,4 @@
-# ⚖️ cache-twitter (from Injustweet)
+# ⚖️ cache-twitter
 
 Este repositorio está dedicado a la memoria cache del front de la aplicación, conectada con MongoDB Atlas. Creamos un servidor que se queda a la escucha de peticiones realizadas tanto por la página web (dashboard-twitter), como por el script encargado de actualizar la "memoria caché" (update-cache-twitter). Una vez aceptada la petición HTTP, el servidor utiliza un cliente de la base de datos que  hemos creado para conectarse con ella y realizar la acción que se haya solicitado. 
 
