@@ -4,3 +4,8 @@ Este repositorio está dedicado a la memoria cache del front de la aplicación, 
 
 - En la carpeta **db/** se encuentra el archivo _conn.js_, dedicado a la conexión con MongoDB.
 - En la carpeta **routes/** se encuentra el archivo _tweets.js_, donde se encuentran las distintas funciones que atienen las peticiones de get y post por parte de la página web.
+
+
+## License
+
+Distributed under the GPL-3.0 License. See [LICENSE](https://github.com/jjavimu/dashboard-twitter/blob/main/LICENSE) for more information.
